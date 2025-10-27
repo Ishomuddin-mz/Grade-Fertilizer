@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Grade Fertilizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-green-50 min-h-full">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="text-6xl mb-4">🧪</div>
+            <h1 class="text-4xl font-bold text-blue-800 mb-2">Kalkulator Grade Fertilizer</h1>
+            <p class="text-blue-700 text-lg">Hitung komposisi dan grade pupuk makro & mikro</p>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Form Tambah Pupuk -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-800 mb-6 flex items-center">
+                    <span class="text-3xl mr-3">➕</span>
+                    Tambah Pupuk
+                </h2>
+
+                <!-- Input Merek Pupuk -->
+                <div class="mb-4">
+                    <label for="merekPupuk" class="block text-sm font-medium text-gray-700 mb-2">Merek/Nama Pupuk</label>
+                    <input type="text" id="merekPupuk" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Contoh: Urea Pusri, NPK Phonska, dll...">
+                </div>
+
+                <!-- Input Berat dan Satuan -->
+                <div class="mb-4 grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="beratPupuk" class="block text-sm font-medium text-gray-700 mb-2">Berat</label>
+                        <input type="number" id="beratPupuk" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0">
+                    </div>
+                    <div>
+                        <label for="satuanBerat" class="block text-sm font-medium text-gray-700 mb-2">Satuan</label>
+                        <select id="satuanBerat" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="kg">Kilogram (Kg)</option>
+                            <option value="gram">Gram (g)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kandungan Unsur Hara Makro -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold text-green-700 mb-3 flex items-center">
+                        <span class="text-xl mr-2">🌿</span>
+                        Kandungan Makro (%)
+                    </h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label for="inputN" class="block text-xs font-medium text-gray-700 mb-1">N (%)</label>
+                            <input type="number" id="inputN" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputP" class="block text-xs font-medium text-gray-700 mb-1">P (%)</label>
+                            <input type="number" id="inputP" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputK" class="block text-xs font-medium text-gray-700 mb-1">K (%)</label>
+                            <input type="number" id="inputK" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputCa" class="block text-xs font-medium text-gray-700 mb-1">Ca (%)</label>
+                            <input type="number" id="inputCa" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputMg" class="block text-xs font-medium text-gray-700 mb-1">Mg (%)</label>
+                            <input type="number" id="inputMg" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputS" class="block text-xs font-medium text-gray-700 mb-1">S (%)</label>
+                            <input type="number" id="inputS" step="0.1" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kandungan Unsur Hara Mikro -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-orange-700 mb-3 flex items-center">
+                        <span class="text-xl mr-2">⚡</span>
+                        Kandungan Mikro (ppm)
+                    </h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label for="inputFe" class="block text-xs font-medium text-gray-700 mb-1">Fe (ppm)</label>
+                            <input type="number" id="inputFe" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputZn" class="block text-xs font-medium text-gray-700 mb-1">Zn (ppm)</label>
+                            <input type="number" id="inputZn" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputCu" class="block text-xs font-medium text-gray-700 mb-1">Cu (ppm)</label>
+                            <input type="number" id="inputCu" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputMn" class="block text-xs font-medium text-gray-700 mb-1">Mn (ppm)</label>
+                            <input type="number" id="inputMn" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputB" class="block text-xs font-medium text-gray-700 mb-1">B (ppm)</label>
+                            <input type="number" id="inputB" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                        <div>
+                            <label for="inputMo" class="block text-xs font-medium text-gray-700 mb-1">Mo (ppm)</label>
+                            <input type="number" id="inputMo" step="0.1" min="0" class="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-blue-500" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Tambah -->
+                <button onclick="tambahPupuk()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                    <span class="text-xl mr-2">➕</span>
+                    Tambah ke Daftar
+                </button>
+            </div>
+
+            <!-- Daftar Pupuk yang Ditambahkan -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                    <span class="text-3xl mr-3">📋</span>
+                    Daftar Pupuk
+                </h2>
+                <div id="daftarPupukInput" class="space-y-3 mb-6">
+                    <p class="text-gray-600 text-center py-8">Belum ada pupuk yang ditambahkan</p>
+                </div>
+                
+                <!-- Tombol Hitung -->
+                <div class="space-y-3">
+                    <button onclick="hitungGradeCampuran()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                        <span class="text-xl mr-2">🧮</span>
+                        Hitung Grade Campuran
+                    </button>
+                    <button onclick="simpanFormulasi()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                        <span class="text-xl mr-2">💾</span>
+                        Simpan Formulasi
+                    </button>
+                    <button onclick="resetDaftar()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition">
+                        <span class="mr-2">🗑️</span>
+                        Reset Semua
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Hasil Perhitungan Grade -->
+        <div id="hasilPerhitungan" class="mt-8 hidden">
+            <div class="grid lg:grid-cols-2 gap-6">
+                <!-- Grade NPK -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3">🏷️</span>
+                        Grade Campuran
+                    </h2>
+                    <div id="gradeNPK" class="text-center">
+                        <div id="displayNamaFormulasi" class="text-xl font-bold text-blue-800 mb-3">Formulasi Campuran</div>
+                        <div class="text-6xl font-bold text-green-600 mb-2" id="displayGrade">0-0-0</div>
+                        <div id="totalBerat" class="text-lg text-gray-600">Total: 0 kg</div>
+                    </div>
+                </div>
+
+                <!-- Komposisi Makro -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3">📈</span>
+                        Komposisi Makro
+                    </h2>
+                    <div id="komposisiMakro" class="space-y-3">
+                        <p class="text-gray-600 text-center">Hasil perhitungan akan muncul di sini</p>
+                    </div>
+                </div>
+
+                <!-- Komposisi Mikro -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-orange-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3">⚗️</span>
+                        Komposisi Mikro
+                    </h2>
+                    <div id="komposisiMikro" class="space-y-3">
+                        <p class="text-gray-600 text-center">Hasil perhitungan akan muncul di sini</p>
+                    </div>
+                </div>
+
+                <!-- Analisis Kualitas -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3">🔍</span>
+                        Analisis Kualitas
+                    </h2>
+                    <div id="analisisKualitas" class="space-y-3">
+                        <p class="text-gray-600 text-center">Analisis akan muncul setelah perhitungan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daftar Formulasi Tersimpan -->
+        <div class="mt-8 bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center">
+                <span class="text-3xl mr-3">📚</span>
+                Daftar Formulasi Tersimpan
+            </h2>
+            <div id="daftarPupukTersimpan" class="space-y-3">
+                <p class="text-gray-600 text-center">Belum ada pupuk yang disimpan</p>
+            </div>
+            <div class="mt-4 text-center">
+                <button onclick="hapusSemuaPupuk()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition">
+                    <span class="mr-2">🗑️</span>
+                    Hapus Semua Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array untuk menyimpan daftar pupuk yang ditambahkan
+        let daftarPupukCampuran = [];
+
+        // Fungsi tambah pupuk ke daftar
+        function tambahPupuk() {
+            const merek = document.getElementById('merekPupuk').value.trim();
+            const berat = parseFloat(document.getElementById('beratPupuk').value) || 0;
+            const satuan = document.getElementById('satuanBerat').value;
+
+            if (!merek) {
+                tampilkanNotifikasi('Mohon masukkan merek pupuk!', 'warning');
+                return;
+            }
+
+            if (berat <= 0) {
+                tampilkanNotifikasi('Mohon masukkan berat pupuk yang valid!', 'warning');
+                return;
+            }
+
+            // Konversi ke kg jika dalam gram
+            const beratKg = satuan === 'gram' ? berat / 1000 : berat;
+
+            const pupuk = {
+                id: Date.now(),
+                merek: merek,
+                berat: berat,
+                satuan: satuan,
+                beratKg: beratKg,
+                kandungan: {
+                    n: parseFloat(document.getElementById('inputN').value) || 0,
+                    p: parseFloat(document.getElementById('inputP').value) || 0,
+                    k: parseFloat(document.getElementById('inputK').value) || 0,
+                    ca: parseFloat(document.getElementById('inputCa').value) || 0,
+                    mg: parseFloat(document.getElementById('inputMg').value) || 0,
+                    s: parseFloat(document.getElementById('inputS').value) || 0,
+                    fe: parseFloat(document.getElementById('inputFe').value) || 0,
+                    zn: parseFloat(document.getElementById('inputZn').value) || 0,
+                    cu: parseFloat(document.getElementById('inputCu').value) || 0,
+                    mn: parseFloat(document.getElementById('inputMn').value) || 0,
+                    b: parseFloat(document.getElementById('inputB').value) || 0,
+                    mo: parseFloat(document.getElementById('inputMo').value) || 0
+                }
+            };
+
+            daftarPupukCampuran.push(pupuk);
+            tampilkanDaftarPupukInput();
+            resetFormInput();
+            tampilkanNotifikasi(`${merek} berhasil ditambahkan!`, 'success');
+        }
+
+        // Fungsi tampilkan daftar pupuk yang sudah ditambahkan
+        function tampilkanDaftarPupukInput() {
+            const container = document.getElementById('daftarPupukInput');
+
+            if (daftarPupukCampuran.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-center py-8">Belum ada pupuk yang ditambahkan</p>';
+                return;
+            }
+
+            const daftarHTML = daftarPupukCampuran.map((pupuk, index) => {
+                const grade = `${Math.round(pupuk.kandungan.n)}-${Math.round(pupuk.kandungan.p)}-${Math.round(pupuk.kandungan.k)}`;
+                return `
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border border-gray-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-green-800">${pupuk.merek}</h3>
+                                <p class="text-sm text-gray-600">Berat: ${pupuk.berat} ${pupuk.satuan} (${pupuk.beratKg} kg)</p>
+                                <p class="text-sm font-semibold text-blue-600">Grade: ${grade}</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editPupuk(${index})" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                    ✏️ Edit
+                                </button>
+                                <button onclick="hapusPupukDariDaftar(${index})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                    🗑️ Hapus
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-700 grid grid-cols-2 gap-2">
+                            <div><strong>Makro:</strong> N:${pupuk.kandungan.n}% P:${pupuk.kandungan.p}% K:${pupuk.kandungan.k}%</div>
+                            <div>Ca:${pupuk.kandungan.ca}% Mg:${pupuk.kandungan.mg}% S:${pupuk.kandungan.s}%</div>
+                        </div>
+                        <div class="text-xs text-gray-700 mt-1">
+                            <strong>Mikro:</strong> Fe:${pupuk.kandungan.fe} Zn:${pupuk.kandungan.zn} Cu:${pupuk.kandungan.cu} Mn:${pupuk.kandungan.mn} B:${pupuk.kandungan.b} Mo:${pupuk.kandungan.mo} ppm
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = daftarHTML;
+        }
+
+        // Fungsi edit pupuk
+        function editPupuk(index) {
+            const pupuk = daftarPupukCampuran[index];
+            
+            // Isi form dengan data pupuk yang akan diedit
+            document.getElementById('merekPupuk').value = pupuk.merek;
+            document.getElementById('beratPupuk').value = pupuk.berat;
+            document.getElementById('satuanBerat').value = pupuk.satuan;
+            document.getElementById('inputN').value = pupuk.kandungan.n;
+            document.getElementById('inputP').value = pupuk.kandungan.p;
+            document.getElementById('inputK').value = pupuk.kandungan.k;
+            document.getElementById('inputCa').value = pupuk.kandungan.ca;
+            document.getElementById('inputMg').value = pupuk.kandungan.mg;
+            document.getElementById('inputS').value = pupuk.kandungan.s;
+            document.getElementById('inputFe').value = pupuk.kandungan.fe;
+            document.getElementById('inputZn').value = pupuk.kandungan.zn;
+            document.getElementById('inputCu').value = pupuk.kandungan.cu;
+            document.getElementById('inputMn').value = pupuk.kandungan.mn;
+            document.getElementById('inputB').value = pupuk.kandungan.b;
+            document.getElementById('inputMo').value = pupuk.kandungan.mo;
+
+            // Hapus pupuk dari daftar
+            daftarPupukCampuran.splice(index, 1);
+            tampilkanDaftarPupukInput();
+            
+            tampilkanNotifikasi('Data pupuk dimuat untuk diedit', 'info');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fungsi hapus pupuk dari daftar
+        function hapusPupukDariDaftar(index) {
+            const namaPupuk = daftarPupukCampuran[index].merek;
+            daftarPupukCampuran.splice(index, 1);
+            tampilkanDaftarPupukInput();
+            tampilkanNotifikasi(`${namaPupuk} dihapus dari daftar`, 'success');
+        }
+
+        // Fungsi reset form input
+        function resetFormInput() {
+            document.getElementById('merekPupuk').value = '';
+            document.getElementById('beratPupuk').value = '';
+            document.getElementById('inputN').value = '';
+            document.getElementById('inputP').value = '';
+            document.getElementById('inputK').value = '';
+            document.getElementById('inputCa').value = '';
+            document.getElementById('inputMg').value = '';
+            document.getElementById('inputS').value = '';
+            document.getElementById('inputFe').value = '';
+            document.getElementById('inputZn').value = '';
+            document.getElementById('inputCu').value = '';
+            document.getElementById('inputMn').value = '';
+            document.getElementById('inputB').value = '';
+            document.getElementById('inputMo').value = '';
+        }
+
+        // Fungsi reset semua daftar
+        function resetDaftar() {
+            daftarPupukCampuran = [];
+            tampilkanDaftarPupukInput();
+            document.getElementById('hasilPerhitungan').classList.add('hidden');
+            tampilkanNotifikasi('Semua data direset', 'success');
+        }
+
+        // Fungsi hitung grade campuran
+        function hitungGradeCampuran() {
+            if (daftarPupukCampuran.length === 0) {
+                tampilkanNotifikasi('Belum ada pupuk yang ditambahkan!', 'warning');
+                return;
+            }
+
+            // Hitung total berat
+            const totalBeratKg = daftarPupukCampuran.reduce((total, pupuk) => total + pupuk.beratKg, 0);
+
+            // Hitung kandungan rata-rata tertimbang
+            let totalKandungan = {
+                n: 0, p: 0, k: 0, ca: 0, mg: 0, s: 0,
+                fe: 0, zn: 0, cu: 0, mn: 0, b: 0, mo: 0
+            };
+
+            daftarPupukCampuran.forEach(pupuk => {
+                const proporsi = pupuk.beratKg / totalBeratKg;
+                Object.keys(totalKandungan).forEach(unsur => {
+                    totalKandungan[unsur] += pupuk.kandungan[unsur] * proporsi;
+                });
+            });
+
+            // Tampilkan hasil
+            document.getElementById('hasilPerhitungan').classList.remove('hidden');
+            
+            // Update grade dan total berat
+            const gradeN = Math.round(totalKandungan.n);
+            const gradeP = Math.round(totalKandungan.p);
+            const gradeK = Math.round(totalKandungan.k);
+            const gradeText = `${gradeN}-${gradeP}-${gradeK}`;
+            
+            document.getElementById('displayGrade').textContent = gradeText;
+            document.getElementById('totalBerat').textContent = `Total: ${totalBeratKg.toFixed(2)} kg`;
+
+            // Update komposisi makro
+            const makroElements = [
+                { nama: 'Nitrogen (N)', nilai: totalKandungan.n, warna: 'bg-blue-100', icon: '🔵' },
+                { nama: 'Phosphorus (P)', nilai: totalKandungan.p, warna: 'bg-purple-100', icon: '🟣' },
+                { nama: 'Potassium (K)', nilai: totalKandungan.k, warna: 'bg-pink-100', icon: '🔴' },
+                { nama: 'Calcium (Ca)', nilai: totalKandungan.ca, warna: 'bg-green-100', icon: '🟢' },
+                { nama: 'Magnesium (Mg)', nilai: totalKandungan.mg, warna: 'bg-yellow-100', icon: '🟡' },
+                { nama: 'Sulfur (S)', nilai: totalKandungan.s, warna: 'bg-orange-100', icon: '🟠' }
+            ];
+
+            const totalMakro = totalKandungan.n + totalKandungan.p + totalKandungan.k + totalKandungan.ca + totalKandungan.mg + totalKandungan.s;
+
+            const makroHTML = makroElements.map(element => {
+                const persentase = totalMakro > 0 ? ((element.nilai / totalMakro) * 100).toFixed(1) : 0;
+                const barWidth = totalMakro > 0 ? (element.nilai / totalMakro) * 100 : 0;
+                
+                return `
+                    <div class="${element.warna} rounded-lg p-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-semibold">${element.icon} ${element.nama}</span>
+                            <span class="font-bold">${element.nilai.toFixed(2)}%</span>
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-500" style="width: ${barWidth}%"></div>
+                        </div>
+                        <div class="text-sm text-gray-600 mt-1">Proporsi: ${persentase}%</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('komposisiMakro').innerHTML = makroHTML;
+
+            // Update komposisi mikro
+            const mikroElements = [
+                { nama: 'Iron (Fe)', nilai: totalKandungan.fe, warna: 'bg-red-100', icon: '🔴' },
+                { nama: 'Zinc (Zn)', nilai: totalKandungan.zn, warna: 'bg-gray-100', icon: '⚪' },
+                { nama: 'Copper (Cu)', nilai: totalKandungan.cu, warna: 'bg-orange-100', icon: '🟠' },
+                { nama: 'Manganese (Mn)', nilai: totalKandungan.mn, warna: 'bg-purple-100', icon: '🟣' },
+                { nama: 'Boron (B)', nilai: totalKandungan.b, warna: 'bg-green-100', icon: '🟢' },
+                { nama: 'Molybdenum (Mo)', nilai: totalKandungan.mo, warna: 'bg-blue-100', icon: '🔵' }
+            ];
+
+            const totalMikro = totalKandungan.fe + totalKandungan.zn + totalKandungan.cu + totalKandungan.mn + totalKandungan.b + totalKandungan.mo;
+
+            const mikroHTML = mikroElements.map(element => {
+                const persentase = totalMikro > 0 ? ((element.nilai / totalMikro) * 100).toFixed(1) : 0;
+                const barWidth = totalMikro > 0 ? (element.nilai / totalMikro) * 100 : 0;
+                
+                return `
+                    <div class="${element.warna} rounded-lg p-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-semibold">${element.icon} ${element.nama}</span>
+                            <span class="font-bold">${element.nilai.toFixed(2)} ppm</span>
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full transition-all duration-500" style="width: ${barWidth}%"></div>
+                        </div>
+                        <div class="text-sm text-gray-600 mt-1">Proporsi: ${persentase}%</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('komposisiMikro').innerHTML = mikroHTML;
+
+            // Analisis kualitas
+            let analisis = [];
+            let kualitasUmum = 'Baik';
+
+            // Analisis NPK
+            if (totalKandungan.n > 0 && totalKandungan.p > 0 && totalKandungan.k > 0) {
+                analisis.push({ 
+                    status: 'success', 
+                    pesan: 'Campuran mengandung NPK lengkap - baik untuk pertumbuhan tanaman',
+                    icon: '✅'
+                });
+            } else {
+                analisis.push({ 
+                    status: 'warning', 
+                    pesan: 'NPK tidak lengkap dalam campuran - pertimbangkan penambahan unsur yang kurang',
+                    icon: '⚠️'
+                });
+                kualitasUmum = 'Perlu Perbaikan';
+            }
+
+            // Analisis rasio NPK
+            if (totalKandungan.n > 0 && totalKandungan.p > 0 && totalKandungan.k > 0) {
+                const rasioNP = (totalKandungan.n / totalKandungan.p).toFixed(1);
+                const rasioNK = (totalKandungan.n / totalKandungan.k).toFixed(1);
+                analisis.push({ 
+                    status: 'info', 
+                    pesan: `Rasio campuran N:P = ${rasioNP}, N:K = ${rasioNK}`,
+                    icon: '📊'
+                });
+            }
+
+            // Analisis unsur sekunder
+            if (totalKandungan.ca > 0 || totalKandungan.mg > 0 || totalKandungan.s > 0) {
+                analisis.push({ 
+                    status: 'success', 
+                    pesan: 'Campuran mengandung unsur sekunder (Ca, Mg, S) - mendukung kualitas tanaman',
+                    icon: '✅'
+                });
+            }
+
+            // Analisis unsur mikro
+            const mikroAktif = [totalKandungan.fe, totalKandungan.zn, totalKandungan.cu, totalKandungan.mn, totalKandungan.b, totalKandungan.mo].filter(val => val > 0).length;
+            if (mikroAktif >= 4) {
+                analisis.push({ 
+                    status: 'success', 
+                    pesan: `Campuran mengandung ${mikroAktif} unsur mikro - sangat baik untuk nutrisi lengkap`,
+                    icon: '🌟'
+                });
+            } else if (mikroAktif > 0) {
+                analisis.push({ 
+                    status: 'warning', 
+                    pesan: `Campuran hanya mengandung ${mikroAktif} unsur mikro - pertimbangkan penambahan`,
+                    icon: '⚠️'
+                });
+            }
+
+            // Analisis jumlah pupuk
+            analisis.push({ 
+                status: 'info', 
+                pesan: `Campuran terdiri dari ${daftarPupukCampuran.length} jenis pupuk dengan total berat ${totalBeratKg.toFixed(2)} kg`,
+                icon: '📦'
+            });
+
+            const analisisHTML = `
+                <div class="mb-4">
+                    <div class="flex items-center justify-center mb-3">
+                        <span class="text-2xl mr-2">${kualitasUmum === 'Baik' ? '🌟' : '⚠️'}</span>
+                        <span class="text-xl font-bold ${kualitasUmum === 'Baik' ? 'text-green-600' : 'text-yellow-600'}">
+                            Kualitas: ${kualitasUmum}
+                        </span>
+                    </div>
+                </div>
+                ${analisis.map(item => `
+                    <div class="flex items-start p-3 rounded-lg ${
+                        item.status === 'success' ? 'bg-green-50 border-l-4 border-green-500' :
+                        item.status === 'warning' ? 'bg-yellow-50 border-l-4 border-yellow-500' :
+                        'bg-blue-50 border-l-4 border-blue-500'
+                    }">
+                        <span class="text-xl mr-3">${item.icon}</span>
+                        <p class="text-gray-700">${item.pesan}</p>
+                    </div>
+                `).join('')}
+            `;
+
+            document.getElementById('analisisKualitas').innerHTML = analisisHTML;
+
+            // Scroll ke hasil
+            document.getElementById('hasilPerhitungan').scrollIntoView({ behavior: 'smooth' });
+            tampilkanNotifikasi('Perhitungan grade campuran selesai!', 'success');
+        }
+
+        // Fungsi simpan formulasi
+        function simpanFormulasi() {
+            if (daftarPupukCampuran.length === 0) {
+                tampilkanNotifikasi('Belum ada pupuk yang ditambahkan!', 'warning');
+                return;
+            }
+
+            const namaFormulasi = prompt('Masukkan nama formulasi:');
+            if (!namaFormulasi) return;
+
+            const formulasi = {
+                nama: namaFormulasi,
+                tanggal: new Date().toLocaleDateString('id-ID'),
+                pupukList: [...daftarPupukCampuran],
+                totalBerat: daftarPupukCampuran.reduce((total, pupuk) => total + pupuk.beratKg, 0)
+            };
+
+            let formulasiTersimpan = JSON.parse(localStorage.getItem('formulasiTersimpan')) || [];
+            formulasiTersimpan.push(formulasi);
+            localStorage.setItem('formulasiTersimpan', JSON.stringify(formulasiTersimpan));
+
+            tampilkanNotifikasi(`Formulasi "${namaFormulasi}" berhasil disimpan!`, 'success');
+            tampilkanDaftarPupuk();
+        }
+
+        // Fungsi tampilkan daftar pupuk tersimpan
+        function tampilkanDaftarPupuk() {
+            const formulasiTersimpan = JSON.parse(localStorage.getItem('formulasiTersimpan')) || [];
+            const container = document.getElementById('daftarPupukTersimpan');
+
+            if (formulasiTersimpan.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-center">Belum ada formulasi yang disimpan</p>';
+                return;
+            }
+
+            const daftarHTML = formulasiTersimpan.map((formulasi, index) => {
+                return `
+                    <div class="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-4 border border-gray-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-lg text-blue-800">${formulasi.nama}</h3>
+                                <p class="text-sm text-gray-600">Disimpan: ${formulasi.tanggal}</p>
+                                <p class="text-sm text-gray-600">Total berat: ${formulasi.totalBerat.toFixed(2)} kg</p>
+                                <p class="text-sm text-gray-600">Jumlah pupuk: ${formulasi.pupukList.length} jenis</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="muatFormulasi(${index})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                    📥 Muat
+                                </button>
+                                <button onclick="hapusFormulasi(${index})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                    🗑️ Hapus
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                            <strong>Pupuk:</strong> ${formulasi.pupukList.map(p => p.merek).join(', ')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = daftarHTML;
+        }
+
+        // Fungsi muat formulasi
+        function muatFormulasi(index) {
+            const formulasiTersimpan = JSON.parse(localStorage.getItem('formulasiTersimpan')) || [];
+            const formulasi = formulasiTersimpan[index];
+
+            if (!formulasi) return;
+
+            daftarPupukCampuran = [...formulasi.pupukList];
+            tampilkanDaftarPupukInput();
+            tampilkanNotifikasi(`Formulasi "${formulasi.nama}" berhasil dimuat!`, 'success');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fungsi hapus formulasi
+        function hapusFormulasi(index) {
+            let formulasiTersimpan = JSON.parse(localStorage.getItem('formulasiTersimpan')) || [];
+            const namaFormulasi = formulasiTersimpan[index].nama;
+            
+            formulasiTersimpan.splice(index, 1);
+            localStorage.setItem('formulasiTersimpan', JSON.stringify(formulasiTersimpan));
+            
+            tampilkanNotifikasi(`Formulasi "${namaFormulasi}" berhasil dihapus!`, 'success');
+            tampilkanDaftarPupuk();
+        }
+
+        // Fungsi hapus semua formulasi
+        function hapusSemuaPupuk() {
+            localStorage.removeItem('formulasiTersimpan');
+            tampilkanNotifikasi('Semua data formulasi berhasil dihapus!', 'success');
+            tampilkanDaftarPupuk();
+        }
+
+        // Fungsi tampilkan notifikasi
+        function tampilkanNotifikasi(pesan, tipe) {
+            const notifikasi = document.createElement('div');
+            notifikasi.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-bold transition-all duration-300 ${
+                tipe === 'success' ? 'bg-green-500' : 
+                tipe === 'warning' ? 'bg-yellow-500' : 
+                tipe === 'info' ? 'bg-blue-500' : 'bg-red-500'
+            }`;
+            notifikasi.textContent = pesan;
+            
+            document.body.appendChild(notifikasi);
+            
+            setTimeout(() => {
+                notifikasi.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notifikasi);
+                }, 300);
+            }, 3000);
+        }
+
+        // Tampilkan daftar formulasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            tampilkanDaftarPupuk();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994f9245a79da459',t:'MTc2MTU0MDYxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
