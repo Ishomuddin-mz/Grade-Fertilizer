@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Grade Fertilizer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             box-sizing: border-box;
@@ -143,6 +144,10 @@
                     <button onclick="simpanFormulasi()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
                         <span class="text-xl mr-2">💾</span>
                         Simpan Formulasi
+                    </button>
+                    <button onclick="downloadPDF()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                        <span class="text-xl mr-2">📄</span>
+                        Download PDF
                     </button>
                     <button onclick="resetDaftar()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition">
                         <span class="mr-2">🗑️</span>
@@ -534,6 +539,12 @@
                 });
             }
 
+            // Analisis fase pertumbuhan tanaman
+            let faseRekomendasi = analisaFasePertumbuhan(totalKandungan.n, totalKandungan.p, totalKandungan.k);
+            if (faseRekomendasi) {
+                analisis.push(faseRekomendasi);
+            }
+
             // Analisis jumlah pupuk
             analisis.push({ 
                 status: 'info', 
@@ -666,6 +677,91 @@
             tampilkanDaftarPupuk();
         }
 
+        // Fungsi analisa fase pertumbuhan tanaman
+        function analisaFasePertumbuhan(n, p, k) {
+            // Toleransi untuk perbandingan
+            const toleransi = 2;
+            
+            // Cek apakah ada kandungan NPK yang signifikan
+            if (n < 1 && p < 1 && k < 1) {
+                return null; // Tidak ada kandungan yang cukup untuk analisis
+            }
+
+            let fase = '';
+            let deskripsi = '';
+            let rekomendasi = '';
+            let icon = '';
+            let status = 'info';
+
+            // 1. Fase Vegetatif Awal: N dan P tinggi, K rendah
+            if (n >= p - toleransi && p >= k + toleransi && n > k + toleransi) {
+                fase = 'Vegetatif Awal';
+                deskripsi = 'Cocok untuk fase pertumbuhan daun dan batang';
+                rekomendasi = 'Gunakan pada 2-4 minggu setelah tanam untuk mendorong pertumbuhan vegetatif';
+                icon = '🌱';
+                status = 'success';
+            }
+            // 2. Vegetatif Transisi: NPK seimbang
+            else if (Math.abs(n - p) <= toleransi && Math.abs(p - k) <= toleransi && Math.abs(n - k) <= toleransi) {
+                fase = 'Vegetatif Transisi';
+                deskripsi = 'Nutrisi seimbang untuk transisi ke fase generatif';
+                rekomendasi = 'Ideal untuk tanaman yang mulai memasuki fase pembungaan';
+                icon = '🌿';
+                status = 'success';
+            }
+            // 3. Generatif Awal: P tinggi, N rendah, K sedang
+            else if (p > n + toleransi && p >= k - toleransi && k > n) {
+                fase = 'Generatif Awal';
+                deskripsi = 'Mendorong pembentukan bunga dan buah muda';
+                rekomendasi = 'Gunakan saat tanaman mulai berbunga untuk meningkatkan pembentukan buah';
+                icon = '🌸';
+                status = 'success';
+            }
+            // 4. Generatif Akhir: N rendah, P sedang, K tinggi
+            else if (k > n + toleransi && k > p + toleransi && p >= n - toleransi) {
+                fase = 'Generatif Akhir';
+                deskripsi = 'Mendukung pematangan buah dan kualitas hasil';
+                rekomendasi = 'Optimal untuk fase pematangan buah dan peningkatan kualitas panen';
+                icon = '🍎';
+                status = 'success';
+            }
+            // Kondisi khusus lainnya
+            else if (n > p + toleransi && n > k + toleransi) {
+                fase = 'Dominan Nitrogen';
+                deskripsi = 'Sangat tinggi nitrogen, fokus pada pertumbuhan daun';
+                rekomendasi = 'Hati-hati penggunaan berlebihan dapat menghambat pembungaan';
+                icon = '🍃';
+                status = 'warning';
+            }
+            else if (p > n + toleransi && p > k + toleransi) {
+                fase = 'Dominan Fosfor';
+                deskripsi = 'Tinggi fosfor, baik untuk perkembangan akar dan bunga';
+                rekomendasi = 'Cocok untuk tanaman yang membutuhkan sistem perakaran kuat';
+                icon = '🌺';
+                status = 'info';
+            }
+            else if (k > n + toleransi && k > p + toleransi) {
+                fase = 'Dominan Kalium';
+                deskripsi = 'Tinggi kalium, meningkatkan ketahanan dan kualitas buah';
+                rekomendasi = 'Baik untuk meningkatkan daya tahan tanaman terhadap stress';
+                icon = '💪';
+                status = 'info';
+            }
+            else {
+                fase = 'Komposisi Khusus';
+                deskripsi = 'Komposisi unik, sesuaikan dengan kebutuhan tanaman spesifik';
+                rekomendasi = 'Konsultasikan dengan ahli pertanian untuk penggunaan optimal';
+                icon = '🔬';
+                status = 'info';
+            }
+
+            return {
+                status: status,
+                pesan: `🎯 **${fase}** - ${deskripsi}. ${rekomendasi}`,
+                icon: icon
+            };
+        }
+
         // Fungsi tampilkan notifikasi
         function tampilkanNotifikasi(pesan, tipe) {
             const notifikasi = document.createElement('div');
@@ -686,10 +782,212 @@
             }, 3000);
         }
 
+        // Fungsi download PDF
+        function downloadPDF() {
+            if (daftarPupukCampuran.length === 0) {
+                tampilkanNotifikasi('Belum ada pupuk yang ditambahkan untuk di-download!', 'warning');
+                return;
+            }
+
+            // Hitung data campuran terlebih dahulu
+            const totalBeratKg = daftarPupukCampuran.reduce((total, pupuk) => total + pupuk.beratKg, 0);
+            let totalKandungan = {
+                n: 0, p: 0, k: 0, ca: 0, mg: 0, s: 0,
+                fe: 0, zn: 0, cu: 0, mn: 0, b: 0, mo: 0
+            };
+
+            daftarPupukCampuran.forEach(pupuk => {
+                const proporsi = pupuk.beratKg / totalBeratKg;
+                Object.keys(totalKandungan).forEach(unsur => {
+                    totalKandungan[unsur] += pupuk.kandungan[unsur] * proporsi;
+                });
+            });
+
+            const gradeN = Math.round(totalKandungan.n);
+            const gradeP = Math.round(totalKandungan.p);
+            const gradeK = Math.round(totalKandungan.k);
+            const gradeText = `${gradeN}-${gradeP}-${gradeK}`;
+
+            // Analisis fase pertumbuhan
+            const faseAnalisis = analisaFasePertumbuhan(totalKandungan.n, totalKandungan.p, totalKandungan.k);
+
+            // Buat PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('LAPORAN ANALISIS PUPUK', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 105, 30, { align: 'center' });
+
+            let yPos = 50;
+
+            // Grade Campuran
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('GRADE CAMPURAN', 20, yPos);
+            yPos += 10;
+
+            doc.setFontSize(24);
+            doc.text(gradeText, 105, yPos, { align: 'center' });
+            yPos += 10;
+
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Total Berat: ${totalBeratKg.toFixed(2)} kg`, 105, yPos, { align: 'center' });
+            yPos += 20;
+
+            // Daftar Pupuk
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('DAFTAR PUPUK YANG DIGUNAKAN', 20, yPos);
+            yPos += 10;
+
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            daftarPupukCampuran.forEach((pupuk, index) => {
+                const pupukGrade = `${Math.round(pupuk.kandungan.n)}-${Math.round(pupuk.kandungan.p)}-${Math.round(pupuk.kandungan.k)}`;
+                doc.text(`${index + 1}. ${pupuk.merek}`, 20, yPos);
+                doc.text(`Berat: ${pupuk.berat} ${pupuk.satuan} (${pupuk.beratKg} kg)`, 30, yPos + 5);
+                doc.text(`Grade: ${pupukGrade}`, 30, yPos + 10);
+                doc.text(`NPK: N:${pupuk.kandungan.n}% P:${pupuk.kandungan.p}% K:${pupuk.kandungan.k}%`, 30, yPos + 15);
+                yPos += 25;
+
+                // Cek jika perlu halaman baru
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+            });
+
+            // Komposisi Makro
+            yPos += 10;
+            if (yPos > 220) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('KOMPOSISI UNSUR MAKRO', 20, yPos);
+            yPos += 10;
+
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            const makroData = [
+                ['Nitrogen (N)', `${totalKandungan.n.toFixed(2)}%`],
+                ['Phosphorus (P)', `${totalKandungan.p.toFixed(2)}%`],
+                ['Potassium (K)', `${totalKandungan.k.toFixed(2)}%`],
+                ['Calcium (Ca)', `${totalKandungan.ca.toFixed(2)}%`],
+                ['Magnesium (Mg)', `${totalKandungan.mg.toFixed(2)}%`],
+                ['Sulfur (S)', `${totalKandungan.s.toFixed(2)}%`]
+            ];
+
+            makroData.forEach(([nama, nilai]) => {
+                doc.text(`${nama}: ${nilai}`, 20, yPos);
+                yPos += 7;
+            });
+
+            // Komposisi Mikro
+            yPos += 10;
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('KOMPOSISI UNSUR MIKRO', 20, yPos);
+            yPos += 10;
+
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            const mikroData = [
+                ['Iron (Fe)', `${totalKandungan.fe.toFixed(2)} ppm`],
+                ['Zinc (Zn)', `${totalKandungan.zn.toFixed(2)} ppm`],
+                ['Copper (Cu)', `${totalKandungan.cu.toFixed(2)} ppm`],
+                ['Manganese (Mn)', `${totalKandungan.mn.toFixed(2)} ppm`],
+                ['Boron (B)', `${totalKandungan.b.toFixed(2)} ppm`],
+                ['Molybdenum (Mo)', `${totalKandungan.mo.toFixed(2)} ppm`]
+            ];
+
+            mikroData.forEach(([nama, nilai]) => {
+                doc.text(`${nama}: ${nilai}`, 20, yPos);
+                yPos += 7;
+            });
+
+            // Analisis Fase Pertumbuhan
+            if (faseAnalisis) {
+                yPos += 15;
+                if (yPos > 220) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text('REKOMENDASI FASE PERTUMBUHAN', 20, yPos);
+                yPos += 10;
+
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'normal');
+                
+                // Parse pesan untuk mendapatkan fase dan deskripsi
+                const pesanParts = faseAnalisis.pesan.split(' - ');
+                const fasePart = pesanParts[0].replace('🎯 **', '').replace('**', '');
+                const deskripsiPart = pesanParts[1] || '';
+
+                doc.text(`Fase: ${fasePart}`, 20, yPos);
+                yPos += 10;
+
+                // Split deskripsi jika terlalu panjang
+                const maxWidth = 170;
+                const deskripsiLines = doc.splitTextToSize(deskripsiPart, maxWidth);
+                deskripsiLines.forEach(line => {
+                    doc.text(line, 20, yPos);
+                    yPos += 7;
+                });
+            }
+
+            // Rasio NPK
+            yPos += 10;
+            if (totalKandungan.n > 0 && totalKandungan.p > 0 && totalKandungan.k > 0) {
+                const rasioNP = (totalKandungan.n / totalKandungan.p).toFixed(1);
+                const rasioNK = (totalKandungan.n / totalKandungan.k).toFixed(1);
+                const rasioPK = (totalKandungan.p / totalKandungan.k).toFixed(1);
+                
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('RASIO UNSUR HARA', 20, yPos);
+                yPos += 8;
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                doc.text(`N:P = ${rasioNP}`, 20, yPos);
+                doc.text(`N:K = ${rasioNK}`, 70, yPos);
+                doc.text(`P:K = ${rasioPK}`, 120, yPos);
+            }
+
+            // Footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setFont(undefined, 'normal');
+                doc.text(`Halaman ${i} dari ${pageCount}`, 105, 290, { align: 'center' });
+                doc.text('Dibuat dengan Kalkulator Grade Fertilizer', 105, 285, { align: 'center' });
+            }
+
+            // Download PDF
+            const fileName = `Analisis_Pupuk_${gradeText}_${new Date().toISOString().slice(0, 10)}.pdf`;
+            doc.save(fileName);
+            
+            tampilkanNotifikasi('File PDF berhasil didownload!', 'success');
+        }
+
         // Tampilkan daftar formulasi saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
             tampilkanDaftarPupuk();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994f9245a79da459',t:'MTc2MTU0MDYxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994fefa346a1f9e6',t:'MTc2MTU0NDQzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
